@@ -26,6 +26,12 @@ function enterIntoLottery() payable external{
 
 }
 
+function random() view private returns(uint){
+
+    return uint(sha256(abi.enocdePacked(block.timestamp , block.difficulty , players.length)));
+
+}
+
 
 
 
