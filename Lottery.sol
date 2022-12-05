@@ -28,10 +28,26 @@ function enterIntoLottery() payable external{
 
 function random() view private returns(uint){
 
-    return uint(sha256(abi.enocdePacked(block.timestamp , block.difficulty , players.length)));
+    return uint(sha256(abi.enocdePacked(block.timestamp , block.difficulty , players.length))); 
 
 }
 
+function pickWinner() external{
+
+    require(msg.sender == manager,"Only Manager can call this function");
+
+    require(address(this).balance > 20 ether,"Contract Balance is not enough to pick the winner");
+
+    require(players.length > 4 ,"Players are not enough to pick the winner");
+
+    uint winnnerIndex = random()%players.length;
+
+    players[winnnerIndex].transfer(address(this).balance);
+
+    players = new address payable[](0);
+
+
+}
 
 
 
