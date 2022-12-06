@@ -50,5 +50,12 @@ function pickWinner() external{
 }
 
 
+function getAllPlayers() view external returns(address payable[] memory){
+    return players;
+}
+
+function getContractBal() view external returns(uint){
+    return address(this).Balance;
+}
 
 }
