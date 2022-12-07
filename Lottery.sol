@@ -36,13 +36,21 @@ function pickWinner() external{
 
     require(msg.sender == manager,"Only Manager can call this function");
 
-    require(address(this).balance > 20 ether,"Contract Balance is not enough to pick the winner");
+    uint totalAmt = address(this).balance;
+
+    require(totalAmt > 20 ether,"Contract Balance is not enough to pick the winner");
 
     require(players.length > 4 ,"Players are not enough to pick the winner");
 
+    uint winnerAmt = totalAmt - 2 ether;
+
+    uint managerProfit = totalAmt - winnerAmt;
+
     uint winnnerIndex = random()%players.length;
 
-    players[winnnerIndex].transfer(address(this).balance);
+    players[winnnerIndex].transfer(winnerAmt);
+
+    manager.transfer(managerProfit);
 
     players = new address payable[](0);
 
