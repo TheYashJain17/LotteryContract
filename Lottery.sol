@@ -4,15 +4,15 @@ pragma solidity ^0.8.9;
 contract Lottery{
 
 address payable public manager;
-address payable[] public Players;
+address payable[] public Players;   //Initialising Players Array And Making It Playable To transfer Winning Amount. 
 
-mapping(address => bool) public alreadyEntered;
+mapping(address => bool) public alreadyEntered; //Mapping For Checking Player's Entry.
 
 constructor(){
-    manager = msg.sender;
+    manager = msg.sender;   //Declaring Value Of Manager; 
 }
 
-function enterIntoLottery() payable external{
+function enterIntoLottery() payable external{   //With This Function Anyone Can Enter Into Lottery Except Manager.
 
     require(msg.sender != manager,"Manager cannot participate into Lottery");
 
@@ -26,13 +26,13 @@ function enterIntoLottery() payable external{
 
 }
 
-function random() view private returns(uint){
+function random() view private returns(uint){   //This Will Give Us Random Hash Value In Uint Form Which Will Help Us To Pick Winner Randomly.
 
     return uint(sha256(abi.enocdePacked(block.timestamp , block.difficulty , players.length))); 
 
 }
 
-function pickWinner() external{
+function pickWinner() external{ //With This Function Winner Will Be Picked And Only Owner Can Access This Function.
 
     require(msg.sender == manager,"Only Manager can call this function");
 
@@ -46,23 +46,26 @@ function pickWinner() external{
 
     uint managerProfit = totalAmt - winnerAmt;
 
-    uint winnnerIndex = random()%players.length;
+    uint winnnerIndex = random()%players.length;    //This Will Give Us WinnerIndex Value.
 
-    players[winnnerIndex].transfer(winnerAmt);
+    players[winnnerIndex].transfer(winnerAmt);  //Transfering Winning Amount To Winner. 
 
-    manager.transfer(managerProfit);
+    manager.transfer(managerProfit);    //Transfering Manager Profit To Manager.
 
-    players = new address payable[](0);
+    players = new address payable[](0); //Reseting The Array After Picking The Winner, So That New Lottery Can Be Started.
 
 
 }
 
 
-function getAllPlayers() view external returns(address payable[] memory){
+
+
+
+function getAllPlayers() view external returns(address payable[] memory){   //This Will Give Us Addresses Of All Players Who Are Participating In The Lottery.
     return players;
 }
 
-function getContractBal() view external returns(uint){
+function getContractBal() view external returns(uint){  //This Will Give Us The Balance Of The Address.
     return address(this).Balance;
 }
 
